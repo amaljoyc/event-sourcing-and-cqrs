@@ -31,7 +31,7 @@ class Customer {
     @CommandHandler
     fun handle(command: ChangeAddressCommand) {
         // @TODO: investigate if there is a better way to change an existing address, maybe by creating a command for Address entity?
-        apply(AddressChangedEvent(command.street, command.city))
+        apply(AddressChangedEvent(command.customerId, command.street, command.city))
     }
 
     @EventSourcingHandler

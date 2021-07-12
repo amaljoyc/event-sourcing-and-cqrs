@@ -10,6 +10,7 @@ data class CustomerCreatedEvent(
 )
 
 data class AddressChangedEvent(
+    val customerId: UUID,
     val street: String,
     val city: String
 )
