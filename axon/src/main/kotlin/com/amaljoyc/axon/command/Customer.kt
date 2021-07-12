@@ -19,19 +19,24 @@ class Customer {
 
     @AggregateMember
     private lateinit var address: Address
+    private var addressChangeCount: Int = 0
 
     constructor() // mandatory to create an emtpy constructor, otherwise axon will complain
 
     @CommandHandler
     constructor(command: CreateCustomerCommand) {
         val customerId = UUID.randomUUID()
+        println(command)
         apply(CustomerCreatedEvent(customerId, command.name, command.street, command.city))
     }
 
     @CommandHandler
     fun handle(command: ChangeAddressCommand) {
         // @TODO: investigate if there is a better way to change an existing address, maybe by creating a command for Address entity?
-        apply(AddressChangedEvent(command.customerId, command.street, command.city))
+        println(command)
+        if (addressChangeCount < 3) {
+            apply(AddressChangedEvent(command.customerId, command.street, command.city))
+        }
     }
 
     @EventSourcingHandler
@@ -39,10 +44,16 @@ class Customer {
         this.customerId = event.customerId
         this.name = event.name
         this.address = Address(event.street, event.city)
+        this.addressChangeCount = 0
+        println(event)
+        println("addressChangeCount = " + addressChangeCount)
     }
 
     @EventSourcingHandler
     fun on(event: AddressChangedEvent) {
         this.address = Address(event.street, event.city)
+        addressChangeCount++
+        println(event)
+        println("addressChangeCount = " + addressChangeCount)
     }
 }

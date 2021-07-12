@@ -13,6 +13,7 @@ class CustomerProjector(private val customerViewRepository: CustomerViewReposito
     @EventHandler
     fun on(event: CustomerCreatedEvent) {
         customerViewRepository.save(CustomerView(event.customerId, event.name, event.street, event.city))
+        println("query -> " + event)
     }
 
     @EventHandler
@@ -24,10 +25,12 @@ class CustomerProjector(private val customerViewRepository: CustomerViewReposito
             customerView.city = event.city
             customerViewRepository.save(customerView)
         }
+        println("query -> " + event)
     }
 
     @QueryHandler
     fun handle(query: FindCustomerQuery): CustomerView {
+        println(query)
         return customerViewRepository.findById(query.customerId).orElse(null)
     }
 }
