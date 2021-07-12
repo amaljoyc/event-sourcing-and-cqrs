@@ -13,7 +13,6 @@ A simple bank application with two Aggregates
 
 Customer aggregate handle following commands
 - createCustomer
-- addAddress
 - changeAddress
 - createSavingsAccount
 
