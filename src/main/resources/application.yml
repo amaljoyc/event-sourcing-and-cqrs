@@ -1,0 +1,32 @@
+# Possible values for these keys are `default`, `xstream`, `java`, and `jackson`.
+axon:
+  serializer:
+    # axon recommends to use `xstream` for Sagas, Tokens and Snapshots
+    # however latest axon version still doesn't support jdk16 when using `xstream` (ref to https://www.gitmemory.com/issue/AxonFramework/AxonFramework/1826/855686981)
+    # hence use `jackson` for time being, or downgrade to jdk11 if we really need `xstream`
+    general: jackson
+
+    # For messages, and especially events, axon recommends the use of the JacksonSerializer
+    events: jackson
+    messages: jackson
+
+  amqp:
+    exchange: MyExchange
+  eventhandling:
+    processors:
+      amqpEvents:
+        source: myQueueMessageSource
+        mode: subscribing
+
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: '/h2'
+
+  rabbitmq:
+    port: 5672
+    hostname: localhost
+    username: guest
+    password: guest
